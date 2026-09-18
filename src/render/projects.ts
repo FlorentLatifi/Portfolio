@@ -1,63 +1,30 @@
 import type { Project } from "../data/types";
+import { esc, inline } from "./html";
 
-function renderPreview(project: Project): string {
-  const monogram = project.monogram ?? project.title.slice(0, 2).toUpperCase();
-  const leadTech = project.tech[0] ?? "Project";
-
-  if (project.imageUrl) {
-    return `
-      <div class="project-preview project-preview--image">
-        <img src="${project.imageUrl}" alt="" loading="lazy" width="640" height="200" />
-        <span class="project-preview-stack">${leadTech}</span>
-      </div>
-    `;
-  }
-
-  return `
-    <div class="project-preview" aria-hidden="true">
-      <span class="project-preview-mono">${monogram}</span>
-      <span class="project-preview-stack">${leadTech}</span>
-      <div class="project-preview-grid"></div>
-    </div>
-  `;
-}
-
-function renderProjectCard(project: Project): string {
-  const featuredClass = project.featured ? " featured" : "";
-  const techRow = project.tech
-    .map((t) => `<span class="tech">${t}</span>`)
+function renderProject(project: Project): string {
+  const points = project.highlights
+    .map((point) => `<li>${inline(point)}</li>`)
     .join("");
 
-  const demoLink = project.demoUrl
-    ? `<a href="${project.demoUrl}" target="_blank" rel="noopener">Live demo ↗</a>`
-    : "";
-
-  const role = project.role
-    ? `<span class="project-role">${project.role}</span>`
+  const source = project.source
+    ? `<a class="project-link" href="${esc(project.source)}" target="_blank" rel="noopener">Source code on GitHub</a>`
     : "";
 
   return `
-    <article class="project-card${featuredClass}">
-      ${renderPreview(project)}
+    <article class="project" id="${esc(project.slug)}">
+      <header class="project-head">
+        <h3 class="project-title">${esc(project.title)}</h3>
+        <p class="project-meta">${esc(project.year)}<br />${esc(project.context)}</p>
+      </header>
       <div class="project-body">
-        <div class="project-top">
-          <span class="project-index">${project.index}</span>
-          <span class="project-date">${project.dateRange}</span>
-        </div>
-        <h3>${project.title}</h3>
-        ${role}
-        <p class="project-summary">${project.summary}</p>
-        <p class="project-desc">${project.description}</p>
-        <div class="tech-row">${techRow}</div>
-        <div class="project-links">
-          <a href="${project.sourceUrl}" target="_blank" rel="noopener">Source ↗</a>
-          ${demoLink}
-        </div>
+        <p class="project-summary">${inline(project.summary)}</p>
+        <ul class="project-points">${points}</ul>
+        <p class="project-stack"><span class="visually-hidden">Built with </span>${project.stack.map((item) => `<span>${esc(item)}</span>`).join(", ")}</p>
+        ${source}
       </div>
-    </article>
-  `;
+    </article>`;
 }
 
 export function renderProjects(projects: Project[]): string {
-  return projects.map(renderProjectCard).join("");
+  return projects.map(renderProject).join("");
 }
