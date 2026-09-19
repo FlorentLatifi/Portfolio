@@ -1,37 +1,33 @@
+import "@fontsource-variable/archivo/wdth.css";
 import "./style.css";
-import { projects } from "./data/projects";
-import { timeline } from "./data/timeline";
-import { skills } from "./data/skills";
-import { contactLinks } from "./data/contact";
-import { coursework } from "./data/coursework";
-import { renderProjects } from "./render/projects";
-import { renderTimeline } from "./render/timeline";
-import { renderSkills } from "./render/skills";
-import { renderContact } from "./render/contact";
-import { renderCoursework } from "./render/coursework";
-import {
-  initScrollReveal,
-  initNavScrollEffect,
-  initActiveSectionNav,
-  initMobileNav,
-} from "./reveal";
 
-function mount(selector: string, html: string): void {
-  const el = document.querySelector(selector);
-  if (!el) {
-    console.warn(`Mount target not found: ${selector}`);
-    return;
-  }
-  el.innerHTML = html;
+/** "Copy email" buttons are hidden until we know the clipboard is usable. */
+function initCopyButtons(): void {
+  if (!navigator.clipboard) return;
+
+  document
+    .querySelectorAll<HTMLButtonElement>("button[data-copy]")
+    .forEach((button) => {
+      const label = button.textContent ?? "";
+      const status = document.getElementById(button.dataset.status ?? "");
+      let reset: number | undefined;
+
+      button.hidden = false;
+      button.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy ?? "");
+          button.textContent = "Copied";
+          if (status) status.textContent = "Email address copied";
+        } catch {
+          button.textContent = "Couldn't copy";
+        }
+        window.clearTimeout(reset);
+        reset = window.setTimeout(() => {
+          button.textContent = label;
+          if (status) status.textContent = "";
+        }, 2000);
+      });
+    });
 }
 
-mount(".project-grid", renderProjects(projects));
-mount(".timeline", renderTimeline(timeline));
-mount(".skills-grid", renderSkills(skills));
-mount(".contact-grid", renderContact(contactLinks));
-mount(".course-list", renderCoursework(coursework));
-
-initMobileNav();
-initNavScrollEffect();
-initActiveSectionNav();
-initScrollReveal();
+initCopyButtons();
