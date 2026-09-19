@@ -71,7 +71,7 @@ export const projects: Project[] = [
     slug: "ecokosova",
     title: "EcoKosova",
     year: "2025",
-    context: "Team of five, top contributor",
+    context: "Team project, top contributor",
     summary:
       "Waste-container monitoring for Kosovo: live fill levels, alerts for full containers, collection route planning and an operator dashboard.",
     highlights: [
@@ -91,13 +91,24 @@ export const projects: Project[] = [
   {
     slug: "freelance-marketplace",
     title: "Freelance marketplace",
-    year: "2025",
-    context: "Full-stack",
+    year: "2026",
+    context: "Team of five, top contributor",
     summary:
       "Clients post projects and hire, freelancers deliver through contracts and milestones, and admins moderate the platform.",
     highlights: [
-      "Admin tooling for the catalogue, bulk import and export, reporting and audit logs.",
+      "Express 5 API over two databases: MySQL for transactional data and MongoDB for high-volume activity feeds.",
+      "Real-time chat and notifications over Socket.IO, and Stripe payments with milestone holds, refunds and webhooks.",
+      "JWT with HttpOnly refresh tokens and CSRF protection; admin tools for bulk import, export, reports and audit logs.",
     ],
-    stack: ["React", "Node.js", "Express", "MongoDB"],
+    stack: [
+      "React 19",
+      "Node.js",
+      "Express 5",
+      "MySQL",
+      "MongoDB",
+      "Socket.IO",
+      "Stripe",
+    ],
+    source: "https://github.com/ertihoxha5/Freelancer-MarketPlace",
   },
 ];
