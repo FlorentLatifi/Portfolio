@@ -30,4 +30,42 @@ function initCopyButtons(): void {
     });
 }
 
+type Theme = "light" | "dark";
+
+/**
+ * The toggle stores an explicit choice; without one the page follows the
+ * system setting. The inline script in index.html applies a stored choice
+ * before the first paint.
+ */
+function initThemeToggle(): void {
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+  if (!button) return;
+
+  const root = document.documentElement;
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+  const current = (): Theme => {
+    const chosen = root.dataset.theme;
+    if (chosen === "light" || chosen === "dark") return chosen;
+    return systemDark.matches ? "dark" : "light";
+  };
+  const sync = (): void => {
+    button.setAttribute("aria-pressed", String(current() === "dark"));
+  };
+
+  button.hidden = false;
+  sync();
+  systemDark.addEventListener("change", sync);
+  button.addEventListener("click", () => {
+    const next: Theme = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // Storage blocked: the choice lasts until the page is closed.
+    }
+    sync();
+  });
+}
+
 initCopyButtons();
+initThemeToggle();

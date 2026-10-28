@@ -1,10 +1,12 @@
 import { defineConfig, type Plugin } from "vite";
+import { benchDate, benchResults } from "./src/data/pragu";
 import { projects } from "./src/data/projects";
 import { skills } from "./src/data/skills";
 import { thesisResults } from "./src/data/thesis";
+import { renderBench } from "./src/render/pragu-bench";
 import { renderProjects } from "./src/render/projects";
 import { renderSkills } from "./src/render/skills";
-import { renderThesisChart } from "./src/render/thesis-chart";
+import { renderThesisFigure } from "./src/render/thesis-chart";
 
 /**
  * Renders the data-driven sections into index.html at build time, so the
@@ -13,9 +15,9 @@ import { renderThesisChart } from "./src/render/thesis-chart";
  */
 function renderSections(): Plugin {
   const sections: Record<string, string> = {
-    projects: renderProjects(projects),
+    "pragu-bench": renderBench(benchResults, benchDate),
+    projects: renderProjects(projects, { javasmell: renderThesisFigure(thesisResults) }),
     skills: renderSkills(skills),
-    "thesis-chart": renderThesisChart(thesisResults),
   };
 
   return {

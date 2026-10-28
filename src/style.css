@@ -5,7 +5,7 @@
    indigo lifted from the gown carries links and the first series.
    ========================================================================== */
 :root {
-  color-scheme: light dark;
+  color-scheme: light;
 
   --paper: #f4f5f8;
   --ink: #171a30;
@@ -44,8 +44,11 @@
   --radius: 6px;
 }
 
+/* Dark follows the system unless the toggle chose light; the toggle can also force dark. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
     --paper: #0f1020;
     --ink: #e9eaf2;
     --ink-2: #b8bbcf;
@@ -61,6 +64,25 @@
     --series-ml: #7482f0;
     --series-rules: #c9805c;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0f1020;
+  --ink: #e9eaf2;
+  --ink-2: #b8bbcf;
+  --muted: #9296ad;
+  --line: #272a45;
+  --grid: #1f2239;
+  --code-bg: #1a1c33;
+  --link: #9ba6ff;
+  --focus: #9ba6ff;
+
+  --band: #16172a;
+
+  --series-ml: #7482f0;
+  --series-rules: #c9805c;
 }
 
 /* ==========================================================================
@@ -249,6 +271,7 @@ code {
 .nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 8px 28px;
   padding-block: 28px;
   font-size: 0.9375rem;
@@ -261,6 +284,29 @@ code {
   color: var(--band-ink);
   text-decoration: underline;
   text-underline-offset: 0.3em;
+}
+
+.theme-toggle {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 14px;
+  border: 1px solid var(--band-line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--band-ink-2);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.theme-toggle:hover {
+  color: var(--band-ink);
+  border-color: var(--band-ink-2);
+}
+.theme-toggle[aria-pressed="true"] {
+  color: var(--band-ink);
+  border-color: var(--band-ink);
 }
 
 .hero-grid {
@@ -388,43 +434,72 @@ code {
 }
 
 /* ==========================================================================
-   Thesis
+   Pragu case study
    ========================================================================== */
-.thesis-grid {
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: var(--fs-small);
+  font-weight: 600;
+}
+
+/* Status badges: the only pill shape on the page */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 1px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+.status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.status--live::before {
+  background: var(--series-ml);
+}
+.status--dev::before {
+  background: var(--series-rules);
+}
+
+.case-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 56px var(--col-gap);
+  gap: 48px var(--col-gap);
   margin-top: clamp(40px, 6vw, 64px);
   align-items: start;
 }
 
-.thesis-text {
+.case-text {
   grid-column: 1 / 7;
 }
-.thesis-text > p {
-  margin-top: 24px;
+.case-text > p {
+  margin-top: 10px;
   max-width: 60ch;
   color: var(--ink-2);
+}
+.case-text > p + .case-heading {
+  margin-top: 32px;
 }
 
-.approaches {
-  display: grid;
-  gap: 20px;
-}
-.approaches dt {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 650;
+.case-heading {
+  font-size: 1.125rem;
   font-stretch: 106%;
-}
-.approaches dd {
-  margin-top: 4px;
-  max-width: 60ch;
-  color: var(--ink-2);
-}
-.approaches dd code {
-  font-size: 0.875em;
+  font-weight: 650;
+  line-height: 1.3;
 }
 
 .key {
@@ -461,25 +536,33 @@ code {
   }
 }
 
-.thesis-text > .stack-line {
-  color: var(--muted);
-  font-size: var(--fs-small);
-}
-
-.thesis-text > .text-link {
-  margin-top: 20px;
-}
-
-.thesis-figure {
+.case-figure {
   grid-column: 7 / 13;
   position: sticky;
   top: 32px;
 }
 
-.thesis-figure figcaption {
+/* Screenshots: a hairline frame keeps light screens off the light page */
+.case-figure img,
+.project-shot img {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--code-bg);
+}
+.case-figure figcaption,
+.project-shot figcaption {
+  margin-top: 10px;
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: var(--fs-small);
+}
+
+.project-figure figcaption,
+.bench figcaption {
   display: grid;
   gap: 6px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 .figure-title {
   font-weight: 650;
@@ -489,17 +572,190 @@ code {
 .figure-note {
   color: var(--muted);
   font-size: var(--fs-small);
-  max-width: 52ch;
+  max-width: 60ch;
+}
+
+/* How it works: five steps, read left to right */
+.case-grid + .case-heading {
+  margin-top: clamp(48px, 7vw, 72px);
+}
+.flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--col-gap);
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+  counter-reset: flow;
+}
+.flow li {
+  padding-top: 14px;
+  border-top: 2px solid var(--ink);
+  color: var(--ink-2);
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  counter-increment: flow;
+}
+.flow-step {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 650;
+  font-stretch: 106%;
+}
+.flow-step::before {
+  /* The list already numbers the steps for screen readers, so the number is visual only */
+  content: counter(flow, decimal-leading-zero) "\2002";
+  content: counter(flow, decimal-leading-zero) "\2002" / "";
+  color: var(--muted);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px var(--col-gap);
+  margin-top: clamp(48px, 7vw, 72px);
+}
+.status-grid > div {
+  grid-column: span 6;
+}
+.status-list {
+  margin-top: 12px;
+  padding: 0;
+  list-style: none;
+}
+.status-list li {
+  position: relative;
+  max-width: 58ch;
+  padding-left: 28px;
+  color: var(--ink-2);
+}
+.status-list li + li {
+  margin-top: 10px;
+}
+/* A tick for what is built, an open circle for what is planned */
+.status-list li::before {
+  content: "";
+  position: absolute;
+  top: 0.45em;
+  left: 2px;
+  width: 12px;
+  height: 7px;
+  border-bottom: 2px solid var(--series-ml);
+  border-left: 2px solid var(--series-ml);
+  transform: rotate(-45deg);
+}
+.status-list--planned li::before {
+  top: 0.4em;
+  width: 11px;
+  height: 11px;
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  transform: none;
+}
+
+.bench {
+  max-width: 880px;
+  margin-top: clamp(48px, 7vw, 72px);
+}
+.table-scroll {
+  overflow-x: auto;
+}
+.data-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+.data-table th,
+.data-table td {
+  padding: 10px 16px 10px 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+.data-table thead th {
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.data-table tbody th {
+  font-weight: 500;
+}
+.data-table tbody th code {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.data-table td {
+  white-space: nowrap;
+}
+
+/* Stack tags, in the case study and in each project */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+.tags li {
+  padding: 2px 9px;
+  border-radius: var(--radius);
+  background: var(--code-bg);
+  color: var(--ink-2);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+}
+.case-tags {
+  margin-top: clamp(40px, 6vw, 56px);
+}
+.case-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin-top: 20px;
 }
 
 @media (max-width: 899px) {
-  .thesis-text,
-  .thesis-figure {
+  .case-text,
+  .case-figure {
     grid-column: 1 / -1;
   }
-  .thesis-figure {
+  .case-figure {
     position: static;
-    grid-row: 1;
+  }
+  .flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .flow li {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    column-gap: 16px;
+    padding-top: 12px;
+    border-top-width: 1px;
+  }
+  .flow-step {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 799px) {
+  .status-grid > div {
+    grid-column: 1 / -1;
+  }
+}
+
+/* On a phone, keep precision and recall in view; WCAG and severity scroll */
+@media (max-width: 599px) {
+  .data-table thead th:first-child {
+    width: 10.5rem;
   }
 }
 
@@ -694,9 +950,20 @@ code {
   line-height: 1.2;
 }
 .project-meta {
-  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 10px;
   color: var(--muted);
   font-size: var(--fs-small);
+}
+.project-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 16px;
 }
 
 .project-body {
@@ -719,23 +986,23 @@ code {
 .project-points li::marker {
   color: var(--muted);
 }
-.project-stack {
-  margin-top: 16px;
-  max-width: 64ch;
-  color: var(--muted);
-  font-size: var(--fs-small);
+.project-shot {
+  margin-top: 20px;
 }
-.project-stack span {
-  white-space: nowrap;
-}
-.project-link {
-  margin-top: 16px;
+.project-figure {
+  max-width: 560px;
+  margin-top: 32px;
 }
 
 @media (max-width: 799px) {
   .project-head,
   .project-body {
     grid-column: 1 / -1;
+  }
+  .project-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 24px;
   }
 }
 
