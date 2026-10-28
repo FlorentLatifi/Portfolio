@@ -6,7 +6,7 @@
     <title>Florent Latifi, Software Engineer</title>
     <meta
       name="description"
-      content="Software engineer in Prishtina, Kosovo, and MSc student in Data Science and Artificial Intelligence at UBT. Building Pragu, an open-source accessibility auditor for Android apps. Open to internship and junior roles."
+      content="Software engineer in Prishtina, Kosovo, with MSc studies in Data Science and Artificial Intelligence at UBT. Creator of Pragu, an open-source accessibility auditor for Android apps."
     />
     <meta name="author" content="Florent Latifi" />
     <meta name="theme-color" content="#16172a" />
@@ -17,7 +17,7 @@
     <meta property="og:title" content="Florent Latifi, Software Engineer" />
     <meta
       property="og:description"
-      content="Building Pragu, an open-source accessibility auditor for Android apps, plus full-stack, data and machine-learning projects. Open to internship and junior roles."
+      content="Creator of Pragu, an open-source accessibility auditor for Android apps, plus full-stack, data and machine-learning projects."
     />
     <meta property="og:image" content="https://florentlatifi.vercel.app/og-image.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -95,13 +95,12 @@
             </h1>
             <p class="hero-lead">
               Software engineer in Prishtina, Kosovo. I build full-stack
-              applications, data pipelines and machine-learning tools, with
+              applications, data pipelines and machine-learning tools, backed by
               automated tests and CI.
             </p>
             <p class="hero-status">
-              Computer Science and Engineering graduate from UBT and MSc student
-              in Data Science and Artificial Intelligence. Looking for an
-              internship or junior role, in Prishtina or remote.
+              BSc in Computer Science and Engineering from UBT, with MSc studies
+              in Data Science and Artificial Intelligence.
             </p>
             <div class="hero-actions">
               <a class="btn btn-solid" href="mailto:florentlatifi123@gmail.com">Email me</a>
@@ -140,38 +139,32 @@
           <h2 id="pragu-title" class="section-title">
             Pragu finds accessibility barriers in Android apps before users hit them
           </h2>
-          <p class="lead">
-            <span lang="sq">Prag</span> is Albanian for threshold: the step a
-            wheelchair can't climb. Pragu reads an app the way the TalkBack screen
-            reader does, marks each barrier on a screenshot, and says who it
-            affects and how to fix it.
-          </p>
 
           <div class="case-grid">
             <div class="case-text">
-              <h3 class="case-heading">The problem</h3>
-              <p>
-                Most developers never use their own app with a screen reader, at a
-                large text size or with low vision, so barriers ship unnoticed: a
-                button TalkBack can only announce as "button", text too faint to
-                read, a target too small to tap. Since June 2025 the European
-                Accessibility Act has covered many apps sold in the EU, including
-                e-commerce, banking and transport.
+              <p class="lead">
+                It reads an app the way the TalkBack screen reader does, marks each
+                barrier on a screenshot, and says who it affects and how to fix it.
+                <span lang="sq">Prag</span> is Albanian for threshold.
               </p>
-
-              <h3 class="case-heading">The approach</h3>
-              <p>
-                One command captures what TalkBack sees, plus a screenshot, without
-                changing the app's code. Rules run on that capture, and every
-                rule's precision is measured on labelled screens before it ships,
-                because a false alarm costs a team's trust.
+              <ul class="case-points">
+                <li>A Kotlin agent and a Node.js CLI capture any Android app over adb, with no changes to its code.</li>
+                <li>WCAG 2.2 rules check missing names and labels, hidden or stateless controls, text contrast and touch targets.</li>
+                <li>Every rule's precision is measured on labelled screens, and CI fails any change that moves a score.</li>
+              </ul>
+              <ul class="tags case-tags" role="list" aria-label="Pragu is built with">
+                <li>TypeScript</li>
+                <li>Node.js</li>
+                <li>Kotlin</li>
+                <li>Android</li>
+                <li>React Native</li>
+                <li>Jetpack Compose</li>
+                <li>GitHub Actions</li>
+              </ul>
+              <p class="case-links">
+                <a class="text-link" href="https://github.com/FlorentLatifi/Pragu" target="_blank" rel="noopener">Source code on GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>
+                <a class="text-link" href="https://github.com/FlorentLatifi/Pragu/blob/main/docs/design/technical-design.md" target="_blank" rel="noopener">Technical design<span class="visually-hidden"> (opens in a new tab)</span></a>
               </p>
-              <pre class="code" tabindex="0" role="region" aria-label="Terminal output of a Pragu scan"><code>$ pnpm pragu scan --from-capture bench/recordings/rn-shop/cart.json
-Pragu scanned dev.pragu.fixtures.rnshop on sdk_gphone64_x86_64 (Android 16)
-5 barriers: 4 errors, 1 warning, 0 info
-  1. Warning: Touch target is too small · seed-tiny-dismiss (WCAG 2.5.8)
-  2. Error: Interactive element has no accessible name · seed-unlabeled-remove (WCAG 4.1.2)
-  …</code></pre>
             </div>
 
             <figure class="case-figure">
@@ -185,81 +178,9 @@ Pragu scanned dev.pragu.fixtures.rnshop on sdk_gphone64_x86_64 (Android 16)
                 loading="lazy"
                 decoding="async"
               />
-              <figcaption>
-                The report for a screen recorded from Pragu's React Native test
-                app. Its visual design isn't final yet.
-              </figcaption>
+              <figcaption>A report for a screen recorded from Pragu's React Native test app.</figcaption>
             </figure>
           </div>
-
-          <h3 class="case-heading">How it works</h3>
-          <ol class="flow" role="list">
-            <li>
-              <span class="flow-step">Agent</span>
-              A Kotlin app on the phone or emulator reads the app's accessibility
-              tree and takes a screenshot.
-            </li>
-            <li>
-              <span class="flow-step">adb</span>
-              It talks to the computer only over adb. CI checks that it has no
-              internet permission.
-            </li>
-            <li>
-              <span class="flow-step">Model</span>
-              A Node.js CLI turns the capture into a platform-neutral model and
-              works out what TalkBack would announce.
-            </li>
-            <li>
-              <span class="flow-step">Rules</span>
-              WCAG 2.2 rules run on the model, with contrast measured from the
-              screenshot's pixels.
-            </li>
-            <li>
-              <span class="flow-step">Report</span>
-              One offline HTML report for people, and versioned JSON for CI.
-            </li>
-          </ol>
-
-          <div class="status-grid">
-            <div>
-              <h3 class="case-heading">Built so far</h3>
-              <ul class="status-list" role="list">
-                <li>The capture agent and the <code>pragu scan</code> CLI, on an emulator or a phone.</li>
-                <li>Seven rules: missing names on controls and images, unlabelled fields, hidden or stateless controls, text contrast and touch-target size.</li>
-                <li>The offline report, with fixes for React Native, Jetpack Compose and Android Views.</li>
-                <li>Pragu Bench, which scores every rule on labelled screens. CI fails any change that moves a score.</li>
-                <li>CI on GitHub Actions for the TypeScript packages and the Kotlin agent, plus a PRD, a technical design, a threat model and decision records.</li>
-              </ul>
-            </div>
-            <div>
-              <h3 class="case-heading">Planned</h3>
-              <ul class="status-list status-list--planned" role="list">
-                <li>A rule for text that gets cut off at 200% font size.</li>
-                <li>The final report design, SARIF output and a GitHub Action that comments on pull requests.</li>
-                <li>Crawling whole user flows, then label suggestions and verified fixes.</li>
-                <li>iOS support.</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- render:pragu-bench -->
-
-          <ul class="tags case-tags" role="list" aria-label="Pragu is built with">
-            <li>TypeScript</li>
-            <li>Node.js</li>
-            <li>Kotlin</li>
-            <li>Android (UiAutomation, adb)</li>
-            <li>React Native</li>
-            <li>Jetpack Compose</li>
-            <li>Vitest</li>
-            <li>JUnit</li>
-            <li>GitHub Actions</li>
-          </ul>
-          <p class="case-links">
-            <a class="text-link" href="https://github.com/FlorentLatifi/Pragu" target="_blank" rel="noopener">Source code on GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>
-            <a class="text-link" href="https://github.com/FlorentLatifi/Pragu/blob/main/docs/design/technical-design.md" target="_blank" rel="noopener">Technical design<span class="visually-hidden"> (opens in a new tab)</span></a>
-            <a class="text-link" href="https://github.com/FlorentLatifi/Pragu/blob/main/ROADMAP.md" target="_blank" rel="noopener">Roadmap<span class="visually-hidden"> (opens in a new tab)</span></a>
-          </p>
         </div>
       </section>
 
@@ -277,19 +198,12 @@ Pragu scanned dev.pragu.fixtures.rnshop on sdk_gphone64_x86_64 (Android 16)
           <div class="about-text">
             <h2 id="about-title" class="section-title">About me</h2>
             <p>
-              I graduated in Computer Science and Engineering from UBT in October
-              2026 and started an MSc in Data Science and Artificial Intelligence
-              there the same month. My bachelor thesis became JavaSmell, and I
-              presented it as a paper, written with my supervisor Altina Salihu,
-              at the 15th UBT Annual International Conference on Computer Science
-              and Engineering.
-            </p>
-            <p>
-              I like work I can measure. Pragu publishes how often each rule is
-              right, Gjurmë's queries were timed on a year of synthetic data, and
-              CineTaste is scored against real MovieLens ratings. Now I'm looking
-              for an internship or junior role where I can ship software
-              alongside experienced engineers.
+              I graduated in Computer Science and Engineering from UBT in 2026 and
+              went on to an MSc in Data Science and Artificial Intelligence there.
+              My thesis became JavaSmell, which I presented at the 15th UBT Annual
+              International Conference on Computer Science and Engineering. I like
+              work I can measure, so every project here ships with tests and an
+              evaluation.
             </p>
           </div>
 
@@ -298,6 +212,10 @@ Pragu scanned dev.pragu.fixtures.rnshop on sdk_gphone64_x86_64 (Android 16)
               <dt>Education</dt>
               <dd>MSc Computer Science and Engineering (Data Science and Artificial Intelligence), UBT, 2026–present</dd>
               <dd>BSc Computer Science and Engineering, UBT, 2023–2026</dd>
+            </div>
+            <div>
+              <dt>Experience</dt>
+              <dd>Intern, ProCredit Bank, Kosovo</dd>
             </div>
             <div>
               <dt>Based in</dt>

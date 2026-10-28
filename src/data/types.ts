@@ -39,16 +39,6 @@ export interface SmellResult {
   bestModel: string;
 }
 
-/** One Pragu rule as scored by Pragu Bench */
-export interface BenchResult {
-  rule: string;
-  checks: string;
-  wcag: string;
-  severity: "error" | "warning";
-  precision: number;
-  recall: number;
-}
-
 export interface SkillGroup {
   label: string;
   items: string[];
