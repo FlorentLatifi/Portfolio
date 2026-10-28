@@ -15,3 +15,8 @@ export function esc(text: string): string {
 export function inline(text: string): string {
   return esc(text).replace(/`([^`]+)`/g, "<code>$1</code>");
 }
+
+/** A link that opens in a new tab, and tells screen reader users so. */
+export function external(href: string, label: string, className: string): string {
+  return `<a class="${className}" href="${esc(href)}" target="_blank" rel="noopener">${esc(label)}<span class="visually-hidden"> (opens in a new tab)</span></a>`;
+}
