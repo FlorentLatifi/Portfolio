@@ -85,11 +85,7 @@ export function renderThesisFigure(results: SmellResult[]): string {
         <figure class="project-figure">
           <figcaption>
             <span class="figure-title">Agreement with expert reviewers, per smell</span>
-            <span class="figure-note">
-              Matthews correlation coefficient: 1 is perfect agreement, 0 is no
-              better than chance. 4,534 samples from 512 Java repositories, split
-              by repository so no project appears in both training and test data.
-            </span>
+            <span class="figure-note">Matthews correlation coefficient, where 1 is perfect agreement.</span>
           </figcaption>
           ${renderThesisChart(results)}
         </figure>`;

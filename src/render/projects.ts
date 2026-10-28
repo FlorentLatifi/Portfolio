@@ -48,15 +48,14 @@ function renderProject(project: Project, extra = ""): string {
       </header>
       <div class="project-body">
         <p class="project-summary">${inline(project.summary)}</p>
-        ${project.image ? renderImage(project.image) : ""}
+        ${project.image ? renderImage(project.image) : extra}
         <ul class="project-points">${points}</ul>
-        ${extra}
         <ul class="tags" role="list" aria-label="${esc(project.title)} is built with">${tags}</ul>
       </div>
     </article>`;
 }
 
-/** `extras` adds a block, such as a chart, to the project with that slug. */
+/** `extras` fills the visual slot of a project with no screenshot, such as JavaSmell's chart. */
 export function renderProjects(
   projects: Project[],
   extras: Record<string, string> = {},
