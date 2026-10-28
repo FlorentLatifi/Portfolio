@@ -863,15 +863,23 @@ code {
   grid-column: 9 / 13;
   align-self: end;
   display: grid;
-  gap: 20px;
+  gap: 24px;
 }
-.facts dt,
+/* Fact labels read as small headings, so the column scans at a glance */
+.facts dt {
+  color: var(--ink);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  font-stretch: 112%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
 .skill-row dt {
   color: var(--muted);
   font-size: var(--fs-small);
 }
 .facts dd {
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .skills {
